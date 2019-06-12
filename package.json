@@ -4,7 +4,7 @@
 	"description": "Playground",
 	"main": "app.js",
 	"scripts": {
-		"start": "node app.js & gulp",
+		"start": "node app.js & webpack -d --watch --progress",
 		"webpack": "webpack -d --watch --progress",
 		"build": "webpack --progress -p"
 	},
