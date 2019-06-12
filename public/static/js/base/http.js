@@ -1,31 +1,59 @@
-function httpGetAsync(theUrl, callback) { //theURL or a path to file
-  var httpRequest = new XMLHttpRequest();
-  httpRequest.onreadystatechange = function() {
-    if (httpRequest.readyState == 4 && httpRequest.status == 200) {
-      var data = httpRequest.responseText;  //if you fetch a file you can JSON.parse(httpRequest.responseText)
-      if (callback) {
-        callback(data);
-      }
-    }
-  };
+module.exports.httpGetAsync = (url) => {
+  return new Promise( (resolve, reject) => {
+    let httpRequest = new XMLHttpRequest();
 
-  httpRequest.open('GET', theUrl, true);
-  httpRequest.send(null);
+    httpRequest.open('GET', url, true);
+
+    httpRequest.onload = () => {
+      if (httpRequest.status == 200) {
+        let data = httpRequest.responseText;
+        resolve(JSON.parse(data));
+      }
+      else {
+        reject({
+          status: httpRequest.status,
+          statusText: httpRequest.statusText
+        });
+      }
+    };
+    httpRequest.onerror = () => {
+      reject({
+        status: httpRequest.status,
+        statusText: httpRequest.statusText
+      });
+    };
+
+    httpRequest.send(null);
+  });
 }
 
+module.exports.httpPostAsync = (url, payload) => {
+  return new Promise((resolve, reject) => {
+    let httpRequest = new XMLHttpRequest();
 
-function httpPostAsync(theUrl, payload, callback) { //theURL or a path to file
-  var httpRequest = new XMLHttpRequest();
-  httpRequest.onreadystatechange = function() {
-    if (httpRequest.readyState == 4 && httpRequest.status == 200) {
-      var data = httpRequest.responseText;  //if you fetch a file you can JSON.parse(httpRequest.responseText)
-      if (callback) {
-        callback(data);
+    httpRequest.open('POST', url, true);
+    httpRequest.setRequestHeader('Content-Type', 'application/json');
+
+    httpRequest.onload = () => {
+      if (httpRequest.status == 200) {
+        let data = httpRequest.responseText;
+        resolve(JSON.parse(data));
       }
-    }
-  };
+      else {
+        reject({
+          status: httpRequest.status,
+          statusText: httpRequest.statusText
+        });
+      }
+    };
 
-  httpRequest.open('POST', theUrl, true);
-  httpRequest.setRequestHeader('Content-Type', 'application/json');
-  httpRequest.send(JSON.stringify({payload: payload}));
+    httpRequest.onerror = () => {
+      reject({
+        status: httpRequest.status,
+        statusText: httpRequest.statusText
+      });
+    };
+
+    httpRequest.send(JSON.stringify(payload));
+  });
 }
