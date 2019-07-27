@@ -1,7 +1,6 @@
 const compression = require('compression');
 const bodyParser = require('body-parser');
 const lusca = require('lusca');
-const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 
 module.exports = (app) => {
@@ -16,8 +15,6 @@ module.exports = (app) => {
   app.use(bodyParser.json());
 
   app.use(bodyParser.urlencoded({ extended: true }));
-
-  app.use(expressValidator());
 
   app.use(lusca.xssProtection(true));
 

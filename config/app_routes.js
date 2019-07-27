@@ -1,9 +1,9 @@
 const path = require('path');
-const nodemailer = require('nodemailer');
-const mg = require('nodemailer-mailgun-transport');
 const express = require('express');
-const request = require("request");
+const request = require('request');
+
 require('dotenv').config()
+
 module.exports = (app) => {
   app.use('/', express.static('public'));
   app.use('/images', express.static('public/static/images'));
